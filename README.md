@@ -34,8 +34,6 @@ Une application android studio créer le 2022-02-01. L'application comporte 2 ac
 
 Le design a été fait par [Hicham Abou](https://dribbble.com/shots/7860061-NotePad-Mobile-App-Design).
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
 
 
 <!-- LICENSE -->
@@ -43,7 +41,6 @@ Le design a été fait par [Hicham Abou](https://dribbble.com/shots/7860061-Note
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
@@ -53,5 +50,3 @@ Distributed under the MIT License. See `LICENSE` for more information.
 Louka Gauthier - [@Loushunt55](https://twitter.com/LouShunt55) - loukagauthier55@gmail.com
 
 Lien du projet: [https://github.com/LoukaG/MyNotes](https://github.com/LoukaG/MyNotes)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
