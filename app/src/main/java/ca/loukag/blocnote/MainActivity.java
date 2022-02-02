@@ -25,7 +25,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView rvListe;
     private AdapterListe adapterListe;
 
     @Override
@@ -33,13 +32,14 @@ public class MainActivity extends AppCompatActivity {
 
 
         super.onCreate(savedInstanceState);
+        //Enlever la barre en haut de l'écran
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.activity_main);
 
-        if(!new File(this.getFilesDir()+"/data.ser").exists()){
-            Note.save(this.getFilesDir().toString());
-        }else{
+
+        //Charger la sauvegarde si elle existe
+        if(new File(this.getFilesDir()+"/data.ser").exists())
             try {
                 FileInputStream fileInputStream = new FileInputStream(this.getFilesDir()+"/data.ser");
                 ObjectInputStream objInput = new ObjectInputStream(fileInputStream);
@@ -52,9 +52,9 @@ public class MainActivity extends AppCompatActivity {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
-        }
 
-        rvListe = findViewById(R.id.rvNote);
+        //Configurer le recyclerView (les items sont géré par la class AdapaterListe)
+        RecyclerView rvListe = findViewById(R.id.rvNote);
         rvListe.setHasFixedSize(true);
         rvListe.setLayoutManager(new LinearLayoutManager(this));
 
@@ -62,14 +62,17 @@ public class MainActivity extends AppCompatActivity {
 
         rvListe.setAdapter(adapterListe);
 
+        //Créer une nouvelle note quand on clique sur le bouton +
         ImageButton newNote = (ImageButton) this.findViewById(R.id.btn_new_note);
         Intent intent = new Intent().setClass(this,NoteEditorActivity.class);
         newNote.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
+                //Note de base lors de la création. Avec le titre "Note #{Id de la note}"
                 Note note = Note.createNote("","");
                 note.setTitre("Note #"+note.getId());
+                //Ouvrir l'activité NoteEditor
                 intent.putExtra("note", (Parcelable) note);
                 startActivity(intent);
             }
@@ -82,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        //Recharger la liste de note
         adapterListe.notifyDataSetChanged();
     }
 }

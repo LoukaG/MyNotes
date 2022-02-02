@@ -18,22 +18,10 @@ import java.util.Calendar;
 
 public class NoteEditorActivity extends AppCompatActivity {
 
-    public static String[] months;
-
     private EditText titre, description;
     private TextView date;
     private ImageButton back, delete;
     private Note note;
-
-    static{
-        months = new String[]{"Janv", "Févr", "Mars", "Avr", "Mai", "Juin", "Juill", "Sept", "Oct", "Nov", "Déc"};
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-
-    }
 
     @Override
     protected void onStart() {
@@ -41,12 +29,15 @@ public class NoteEditorActivity extends AppCompatActivity {
 
         setContentView(R.layout.note_editor);
 
+        //Charger les inputs de la page
         titre = (EditText) this.findViewById(R.id.inputTitre);
         description = (EditText) this.findViewById(R.id.inputDescription);
         date = (TextView) this.findViewById(R.id.tvEditorDate);
         delete = (ImageButton) this.findViewById(R.id.btn_delete);
         Intent intent = getIntent();
         note = (Note)intent.getParcelableExtra("note");
+
+        //Définir les inputs avec les valeurs de la note
         titre.setText(note.getTitre());
         description.setText(note.getDescription());
         date.setText(note.getStringDateCreation());
@@ -55,25 +46,31 @@ public class NoteEditorActivity extends AppCompatActivity {
 
         Intent i = new Intent().setClass(this,MainActivity.class);
 
-
+        //Clique bouton retour
         back.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
-                if(titre.getText().toString().length() >= 3) {
-                    note.setTitre(titre.getText().toString());
-                    note.setDescription(description.getText().toString());
-                    Note.updateNote(note);
-                    Note.save(getFilesDir().toString());
-                    startActivity(i);
-                }
+                //Le titre doit avoir au minimum 3 caractères
+                if(titre.getText().toString().length() < 3) return;
+
+
+                //Sauvegarder et retourner vers la page d'acceuil
+                note.setTitre(titre.getText().toString());
+                note.setDescription(description.getText().toString());
+                Note.updateNote(note);
+                Note.save(getFilesDir().toString());
+                startActivity(i);
             }
         });
 
+
+        //Quand l'utilisateur clique sur le bouton supprimer
         delete.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
+                //Dialogue de confirmation
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                 builder.setCancelable(true);
                 builder.setTitle("Suppression");
@@ -83,6 +80,7 @@ public class NoteEditorActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                //Confirmation. Suppression et retour vers la page d'acceuil
                                 Note.removeNote(note.getId());
                                 Note.save(getFilesDir().toString());
                                 startActivity(i);

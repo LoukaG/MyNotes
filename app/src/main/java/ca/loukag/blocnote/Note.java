@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,17 +23,12 @@ public class Note implements Parcelable, Serializable {
 
     private static ArrayList<Note> noteList;
 
+    /**
+     * Note lors de l'installation de l'application. Sera ajouté au note seulement lorsque le fichier de sauvegarde n'existe pas
+     */
     static{
         Note.noteList = new ArrayList<>();
         Note.createNote("\uD83D\uDC96 Bienvenue dans MyNotes !","Bienvenue dans MyNotes! \uD83D\uDCDD\n\nPrenez des notes simplement et efficacement. \uD83E\uDD29 \nMerci d'utiliser mon application et je vous souhaite la bienvenue. \uD83D\uDE01\n - Louka Gauthier \uD83D\uDC68\u200D\uD83D\uDCBB");
-    }
-
-    protected Note(Parcel in) {
-        id = in.readInt();
-        titre = in.readString();
-        description = in.readString();
-        dateCreation = (LocalDateTime) in.readSerializable();
-
     }
 
     public static final Creator<Note> CREATOR = new Creator<Note>() {
@@ -59,6 +56,10 @@ public class Note implements Parcelable, Serializable {
         return note;
     }
 
+    /**
+     * Sauvegarder la liste de note dans un fichier data.ser
+     * @param path Le chemin ou le fichier va être enregistré.
+     */
     public static void save(String path){
         try {
             FileOutputStream file = new FileOutputStream(path+"/data.ser");
@@ -73,7 +74,11 @@ public class Note implements Parcelable, Serializable {
         }
     }
 
-    public static void loadSave(ArrayList<Note> notes){
+    /**
+     * Charger une liste de note
+     * @param notes La liste de note
+     */
+    public static void loadSave(@NonNull ArrayList<Note> notes){
         Note.noteList = notes;
     }
 
@@ -142,6 +147,18 @@ public class Note implements Parcelable, Serializable {
         this.description = _description;
         this.dateCreation = _dateCreation;
         LocalDateTime.now();
+    }
+
+    /**
+     * Create note with Intent
+     * @param in The parcel
+     */
+    protected Note(Parcel in) {
+        id = in.readInt();
+        titre = in.readString();
+        description = in.readString();
+        dateCreation = (LocalDateTime) in.readSerializable();
+
     }
 
     /**

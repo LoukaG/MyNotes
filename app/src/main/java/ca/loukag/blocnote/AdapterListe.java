@@ -45,11 +45,14 @@ public class AdapterListe extends RecyclerView.Adapter<AdapterListe.ViewHolder> 
             this.tvDate = itemView.findViewById(R.id.tvDate);
             this.adapter = adapter;
 
+            //Gérer les cliques sur les notes
             itemView.setOnLongClickListener(new View.OnLongClickListener(){
 
+                //Clique long (supprimer)
                 @Override
                 public boolean onLongClick(View view) {
                     Note note = Note.getNote(getLayoutPosition());
+                    //Fenêtre de confirmation
                     AlertDialog.Builder builder = new AlertDialog.Builder(itemView.getContext());
                     builder.setCancelable(true);
                     builder.setTitle("Suppression");
@@ -59,6 +62,7 @@ public class AdapterListe extends RecyclerView.Adapter<AdapterListe.ViewHolder> 
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
+                                    //Confirmation suppression
                                     Note.removeNote(note.getId());
                                     adapter.notifyDataSetChanged();
                                     Toast.makeText(itemView.getContext(),"La note a été supprimer.",Toast.LENGTH_SHORT).show();
@@ -73,7 +77,7 @@ public class AdapterListe extends RecyclerView.Adapter<AdapterListe.ViewHolder> 
                     return true;
                 }
             });
-
+            //Clique court (ouvrir note)
             itemView.setOnClickListener(new View.OnClickListener(){
 
                 @Override
